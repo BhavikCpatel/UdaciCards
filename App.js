@@ -1,23 +1,49 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Provider } from 'react-redux';
+import { SafeAreaView, StatusBar, View } from 'react-native';
+import { Constants, Font, AppLoading } from 'expo';
+import { Ionicons } from '@expo/vector-icons';
+import RootNavigator from './components/AppNavigator';
+import configureStore from './redux/store';
 
 export default class App extends React.Component {
+  static async loadAppState() {
+    await Font.loadAsync(Ionicons.font);
+  }
+  constructor(props) {
+    super(props);
+    this.state = {
+      isReady: false,
+    };
+  }
   render() {
+    if (!this.state.isReady) {
+      return (
+        <AppLoading
+          startAsync={App.loadAppState}
+          onFinish={() =>
+            this.setState({
+              isReady: true,
+            })
+          }
+          onError={console.warn}
+        />
+      );
+    }
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <Provider store={configureStore()}>
+        <SafeAreaView>
+          <View>
+            <StatusBar
+              style={{
+                height: Constants.statusBarHeight,
+              }}
+              barStyle="light-content"
+            />
+          </View>
+          <RootNavigator />
+        </SafeAreaView>
+      </Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
