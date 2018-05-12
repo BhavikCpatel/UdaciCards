@@ -1,5 +1,29 @@
 {
   "expo": {
-    "sdkVersion": "27.0.0"
+    "sdkVersion": "27.0.0",
+    "name": "UdaciCards",
+    "slug": "udacicards",
+    "description": "An Udacity Nanodegree Project on React Native",
+    "privacy": "public",
+    "version": "1.0",
+    "splash": {
+      "image": "./assets/appIcon.png",
+      "backgroundColor": "#f4511e",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": [ "assets/*"],
+    "icon": "./assets/appIcon.png",
+    "orientation": "portrait",
+    "notification": {
+      "icon": "./assets/icon48.png"
+    },
+    "ios": {
+     "bundleIdentifier": "com.bhavikcpatel.udacicards"
+    },
+    "android": {
+     "package": "com.bhavikcpatel.udacicards",
+     "versionCode": 1
+    }
   }
-}
+  }
+
