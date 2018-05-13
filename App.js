@@ -5,6 +5,7 @@ import { Constants, Font, AppLoading } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigator from './components/AppNavigator';
 import configureStore from './redux/store';
+import styles from './components/styles/appStyles';
 
 export default class App extends React.Component {
   static async loadAppState() {
@@ -32,7 +33,7 @@ export default class App extends React.Component {
     }
     return (
       <Provider store={configureStore()}>
-        <SafeAreaView>
+        <SafeAreaView style={styles.safeView}>
           <View>
             <StatusBar
               style={{
