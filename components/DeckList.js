@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { resetNotify } from '../redux/actions';
 import { getDecksAsync } from '../redux/asyncActions';
-import { alertMessage, getDecksList } from '../utils/helper';
+import { alertMessage, getDecksList, setNotification } from '../utils/helper';
 import { headerTextColor } from '../utils/colors';
 import AddDeckButton from './AddDeckButton';
 import styles from './styles/deckListStyle';
@@ -55,7 +55,8 @@ class DockList extends Component {
   });
 
   componentDidMount() {
-    // Todo: Add Notification Here
+    // Set Local Notification
+    setNotification();
     this.props.getDecksAsync();
   }
 
