@@ -72,3 +72,10 @@ export function setNotification() {
       }
     });
 }
+
+export function getScoreMessage(score) {
+  if (score > 0.9) {
+    return 'Excellent!';
+  }
+  return score > 0.7 ? 'Great Job!' : 'Try Hard!';
+}
