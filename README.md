@@ -64,3 +64,13 @@ Like `npm start`, but also attempts to open your app on a connected Android devi
 2. Add the Genymotion tools directory to your path (instructions for [Mac](http://osxdaily.com/2014/08/14/add-new-path-to-path-command-line/), [Linux](http://www.computerhope.com/issues/ch001647.htm), and [Windows](https://www.howtogeek.com/118594/how-to-edit-your-system-path-for-easy-command-line-access/)).
 3. Make sure that you can run adb from your terminal.
 
+## License:
+
+MIT
+
+## Acknowledgments:
+
+Big thanks to the following:
+
+1.  Udacity Team and my Udacity mentor (Steven) for providing help on React & Redux
+2.  all developers who contributed to libraries/packages that I've used in my project.
