@@ -25,10 +25,6 @@ This project was created using Udacity's React Nanodegree MyReads project templa
   * [npm start](#npm-start)
   * [npm run ios](#npm-run-ios)
   * [npm run android](#npm-run-android)
-  * [npm run eject](#npm-run-eject)
-* [Sharing and Deployment](#sharing-and-deployment)
-  * [Publishing to Expo's React Native Community](#publishing-to-expos-react-native-community)
-  * [Building an Expo "standalone" app](#building-an-expo-standalone-app)
 
 
 ## Available Scripts
