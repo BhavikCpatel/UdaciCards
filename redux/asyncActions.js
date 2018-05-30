@@ -19,7 +19,7 @@ export const saveDeckAsync = deckTitle => async dispatch => {
   try {
     await api.addDeck(deckTitle);
     dispatch(actions.addDeck(deckTitle));
-    dispatch(actions.notify('DECK', 'Deck Saved Successfully', 'success'))
+    dispatch(actions.notify('DECK', 'Deck Saved Successfully', 'success'));
     return Promise.resolve('success');
   } catch (error) {
     return Promise.reject(error);

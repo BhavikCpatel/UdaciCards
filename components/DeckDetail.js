@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import styles from './styles/deckDetailStyle';
 import { alertMessage } from '../utils/helper';
@@ -18,9 +19,18 @@ class DockDetail extends Component {
   static defaultProps = {};
   static navigationOptions = ({ navigation }) => {
     const topic = navigation.getParam('topic', '');
-
     return {
       title: topic || 'Card Detail',
+      headerLeft: (
+        <TouchableOpacity onPress={() => navigation.navigate('Decks')}>
+          <Ionicons
+            size={20}
+            style={{ paddingLeft: 28 }}
+            color="white"
+            name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back'}
+          />
+        </TouchableOpacity>
+      ),
     };
   };
 

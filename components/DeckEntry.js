@@ -7,23 +7,31 @@ import { saveDeckAsync } from '../redux/asyncActions';
 import InputBox from './UI/InputBox';
 import CustomButton from './UI/CustomButton';
 import styles from './styles/entryFormStyles';
+import { resetNotify } from '../redux/actions';
 
 class DeckEntry extends Component {
   static propTypes = {
     decks: PropTypes.object.isRequired,
+    notify: PropTypes.shape({
+      category: PropTypes.string,
+      message: PropTypes.string,
+    }),
+    resetNotify: PropTypes.func.isRequired,
     saveDeckAsync: PropTypes.func.isRequired,
     navigation: PropTypes.shape({
       getParam: PropTypes.func,
-      goBack: PropTypes.func,
+      navigate: PropTypes.func,
     }).isRequired,
   };
-  static defaultProps = {};
+  static defaultProps = { notify: null };
   constructor(props) {
     super(props);
     this.state = {
       title: '',
+      isDone: false,
     };
   }
+
   /* Validate Deck Entry for blank and duplicate */
   validateDeckName(newDeck) {
     return newDeck
@@ -37,7 +45,12 @@ class DeckEntry extends Component {
     if (this.validateDeckName(deck)) {
       this.props
         .saveDeckAsync(deck)
-        .then(() => this.props.navigation.goBack())
+        .then(() => {
+          alertMessage(this.props.notify.message);
+          this.setState({ isDone: true });
+          this.props.resetNotify();
+          this.props.navigation.navigate('DeckDetail', { topic: deck });
+        })
         .catch(err => alertMessage(err));
     } else {
       this.setState(() => ({
@@ -47,6 +60,9 @@ class DeckEntry extends Component {
     }
   }
   render() {
+    if (this.state.isDone) {
+      return null;
+    }
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -71,7 +87,7 @@ class DeckEntry extends Component {
           style={styles.saveButton}
           onTap={() => this.submitDeck(this.state.title)}
         >
-          Save
+          Create Deck
         </CustomButton>
       </KeyboardAvoidingView>
     );
@@ -82,11 +98,13 @@ function mapStateToProps(state) {
   return {
     isWaiting: state.isWaiting,
     decks: state.decks,
+    notify: state.notify,
   };
 }
 export default connect(
   mapStateToProps,
   {
+    resetNotify,
     saveDeckAsync,
   },
 )(DeckEntry);

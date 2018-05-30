@@ -1,39 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, Animated, Platform } from 'react-native';
-import { connect } from 'react-redux';
-import ScoreCard from './ScoreCard';
+import { Text, View, Animated } from 'react-native';
 import styles from './styles/quizPageStyle';
 import CustomButton from './UI/CustomButton';
 
 class QuizPage extends Component {
   static propTypes = {
-    navigation: PropTypes.shape({
-      getParam: PropTypes.func,
-      setParam: PropTypes.func,
-      goBack: PropTypes.func,
-      navigate: PropTypes.func,
-    }).isRequired,
+    questions: PropTypes.arrayOf(
+      PropTypes.shape({
+        question: PropTypes.string,
+        answer: PropTypes.string,
+      }),
+    ).isRequired,
+    onQuizComplete: PropTypes.func.isRequired,
   };
-  static navigationOptions = ({ navigation }) => {
-    const topic = navigation.getParam('topic', 'Card Detail');
-    return {
-      title: Platform.OS === 'ios' ? '' : topic,
-    };
-  };
+
   state = {
     isFlipped: false,
     rotate: new Animated.Value(0),
     opacity: new Animated.Value(0),
     scale: new Animated.Value(1),
-    totalQuestions: 0,
     correctAnswers: 0,
     questionsIndex: 0,
+    totalQuestions: this.props.questions.length,
   };
 
   componentDidMount() {
-    this.setTotalQuestions();
-
     Animated.sequence([
       Animated.parallel([
         Animated.timing(this.state.opacity, {
@@ -55,52 +47,51 @@ class QuizPage extends Component {
     ]).start();
   }
 
-  setTotalQuestions() {
-    const questions = this.props.navigation.getParam('questions', []);
-    this.setState(() => ({
-      totalQuestions: questions.length,
-    }));
-  }
-
   flip = answerCount => {
     const { isFlipped } = this.state;
+    let { questionsIndex, correctAnswers } = this.state;
     if (isFlipped) {
-      this.setState(prevState => ({
-        questionsIndex: prevState.questionsIndex + 1,
-        correctAnswers: prevState.correctAnswers + answerCount,
-        isFlipped: !prevState.isFlipped,
+      questionsIndex += 1;
+      correctAnswers += answerCount;
+      if (questionsIndex === this.state.totalQuestions) {
+        this.props.onQuizComplete(correctAnswers);
+        return;
+      }
+
+      this.setState(() => ({
+        questionsIndex,
+        correctAnswers,
+        isFlipped: !isFlipped,
       }));
     } else {
       this.setState({
-        isFlipped: !this.state.isFlipped,
+        isFlipped: !isFlipped,
       });
     }
-
-    if (this.state.questionsIndex < this.state.totalQuestions) {
-      Animated.sequence([
-        Animated.parallel([
-          Animated.spring(this.state.rotate, {
-            toValue: Number(!isFlipped),
-            bounciness: 12,
-            useNativeDriver: true,
-          }),
-          Animated.timing(this.state.scale, {
-            duration: 400,
-            toValue: 1.03,
-            useNativeDriver: true,
-          }),
-        ]),
-        Animated.timing(this.state.scale, {
-          duration: 200,
-          toValue: 1,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    } else {
-      this.props.navigation.setParam('topic', 'Score Card');
-    }
+    this.animateQuizCard(isFlipped);
   };
 
+  animateQuizCard(isFlipped) {
+    Animated.sequence([
+      Animated.parallel([
+        Animated.spring(this.state.rotate, {
+          toValue: Number(!isFlipped),
+          bounciness: 12,
+          useNativeDriver: true,
+        }),
+        Animated.timing(this.state.scale, {
+          duration: 400,
+          toValue: 1.03,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.timing(this.state.scale, {
+        duration: 200,
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }
   render() {
     const {
       isFlipped,
@@ -110,20 +101,11 @@ class QuizPage extends Component {
       questionsIndex,
       totalQuestions,
     } = this.state;
-    const { navigate, getParam } = this.props.navigation;
 
     if (questionsIndex >= totalQuestions) {
-      return (
-        <ScoreCard
-          totalQuestions={totalQuestions}
-          correctAnswers={this.state.correctAnswers}
-          onHomeTap={() => navigate('Decks')}
-        />
-      );
+      return null;
     }
-
-    const questions = getParam('questions', []);
-    const { question, answer } = questions[questionsIndex];
+    const { question, answer } = this.props.questions[questionsIndex];
 
     return (
       <View style={styles.container}>
@@ -203,4 +185,4 @@ class QuizPage extends Component {
   }
 }
 
-export default connect()(QuizPage);
+export default QuizPage;

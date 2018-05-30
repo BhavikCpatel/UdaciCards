@@ -11,7 +11,8 @@ import styles from './styles/scoreCardStyle';
 
 export default class ScoreCard extends Component {
   static propTypes = {
-    onHomeTap: PropTypes.func.isRequired,
+    onBackTap: PropTypes.func.isRequired,
+    onRedoTap: PropTypes.func.isRequired,
     totalQuestions: PropTypes.number.isRequired,
     correctAnswers: PropTypes.number.isRequired,
   };
@@ -44,7 +45,7 @@ export default class ScoreCard extends Component {
   }
 
   render() {
-    const { totalQuestions, correctAnswers, onHomeTap } = this.props;
+    const { totalQuestions, correctAnswers, onBackTap, onRedoTap } = this.props;
     const score = correctAnswers / totalQuestions;
     return (
       <View style={styles.container}>
@@ -92,13 +93,30 @@ export default class ScoreCard extends Component {
             />
           )}
         </View>
-        <TouchableOpacity onPress={onHomeTap}>
-          <Ionicons
-            size={48}
-            style={styles.homeIcon}
-            name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-          />
-        </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            height: 60,
+            width: '80%',
+          }}
+        >
+          <TouchableOpacity onPress={onBackTap}>
+            <Ionicons
+              size={48}
+              style={styles.homeIcon}
+              name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back'}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={onRedoTap}>
+            <Ionicons
+              size={48}
+              style={styles.homeIcon}
+              name={Platform.OS === 'ios' ? 'ios-redo' : 'md-redo'}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

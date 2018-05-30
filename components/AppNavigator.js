@@ -1,7 +1,7 @@
 import { createStackNavigator } from 'react-navigation';
 import DeckList from './DeckList';
 import DeckDetail from './DeckDetail';
-import QuizPage from './QuizPage';
+import Quiz from './Quiz';
 import AddFlashCard from './AddFlashCard';
 import DeckEntry from './DeckEntry';
 import ScoreCard from './ScoreCard';
@@ -28,7 +28,7 @@ const RootNavigator = createStackNavigator(
       screen: ScoreCard,
     },
     Quiz: {
-      screen: QuizPage,
+      screen: Quiz,
     },
     FlashCardEntry: {
       screen: AddFlashCard,

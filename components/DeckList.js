@@ -10,9 +10,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import { resetNotify } from '../redux/actions';
 import { getDecksAsync } from '../redux/asyncActions';
-import { alertMessage, getDecksList, setNotification } from '../utils/helper';
+import { getDecksList, setNotification } from '../utils/helper';
 import { headerTextColor } from '../utils/colors';
 import AddDeckButton from './AddDeckButton';
 import styles from './styles/deckListStyle';
@@ -30,14 +29,9 @@ const flatListItemSeparator = () => (
 
 class DockList extends Component {
   static propTypes = {
-    notify: PropTypes.shape({
-      category: PropTypes.string,
-      message: PropTypes.string,
-    }),
     decks: PropTypes.object.isRequired,
     isWaiting: PropTypes.bool,
     getDecksAsync: PropTypes.func.isRequired,
-    resetNotification: PropTypes.func.isRequired,
     navigation: PropTypes.shape({
       getParam: PropTypes.func,
       goBack: PropTypes.func,
@@ -58,13 +52,6 @@ class DockList extends Component {
     // Set Local Notification
     setNotification();
     this.props.getDecksAsync();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.notify && !prevProps.notify) {
-      alertMessage(this.props.notify.message);
-      this.props.resetNotification();
-    }
   }
 
   flatListFooter = () => (
@@ -137,12 +124,10 @@ function mapStateToProps(state) {
   return {
     isWaiting: state.isWaiting,
     decks: state.decks,
-    notify: state.notify,
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  resetNotification: () => dispatch(resetNotify()),
   getDecksAsync: () => dispatch(getDecksAsync()),
 });
 
